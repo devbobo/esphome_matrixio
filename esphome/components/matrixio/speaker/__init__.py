@@ -23,7 +23,7 @@ CONFIG_SCHEMA = speaker.SPEAKER_SCHEMA.extend(
         cv.GenerateID(): cv.declare_id(matrix_speaker),
         cv.Optional(CONF_AUDIO_OUT, default="headphone"): cv.enum(OUTPUTS, upper=False),
         cv.Optional(CONF_VOLUME, default=80): cv.All(int, cv.Range(min=1, max=100)),
-        cv.Optional(CONF_MAX_CHANNELS, default=1): cv.int,
+        cv.Optional(CONF_MAX_CHANNELS, default=1): cv.int_,
     }
 ).extend(wb_device_schema())
 

@@ -15,7 +15,7 @@ mics = matrixio_ns.class_("Microphone", microphone.Microphone, wb_device, cg.Com
 CONFIG_SCHEMA = microphone.MICROPHONE_SCHEMA.extend(
     {
         cv.GenerateID(): cv.declare_id(mics),
-        cv.Optional(CONF_MAX_CHANNELS, default=8): cv.int,
+        cv.Optional(CONF_MAX_CHANNELS, default=8): cv.int_,
     }
 ).extend(wb_device_schema())
 
