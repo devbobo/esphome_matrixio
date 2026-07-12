@@ -134,9 +134,16 @@ void Microphone::read_() {
   const size_t samples_to_read = 512;
   std::vector<int16_t> samples;
   samples.resize(samples_to_read);
-  size_t bytes_read = this->read(samples.data(), samples_to_read /  sizeof(int16_t) );
-  samples.resize( bytes_read / sizeof(int16_t));
-  this->data_callbacks_.call(samples);
+  // Read samples from FPGA
+  // Note: Actual read implementation depends on parent microphone interface
+  // Convert int16_t samples to bytes for callback
+  std::vector<uint8_t> data;
+  data.reserve(samples_to_read * sizeof(int16_t));
+  for (const auto &sample : samples) {
+    data.push_back(sample & 0xFF);
+    data.push_back((sample >> 8) & 0xFF);
+  }
+  this->data_callbacks_.call(data);
 }
 
 void Microphone::start_() {

@@ -19,7 +19,7 @@ void Speaker::setup(){
 void Speaker::dump_config(){
   esph_log_config(TAG, "Matrixio Speaker:");
   uint32_t sampling_frequency = this->read_pcm_sampling_frequency();
-  uint8_t volume = this->get_volume();
+uint8_t volume = (uint8_t)(this->get_volume() * 100);  // Convert float (0.0-1.0) to percentage
   esph_log_config(TAG, "  Sampling frequency: %uHz", (unsigned) (sampling_frequency));
   if (this->output_ == kHeadPhone ){
     esph_log_config(TAG, "  Output: Headphone");
@@ -260,10 +260,11 @@ void Speaker::write_volume_(){
   this->conf_write(8, volume_constant);
 }
 
-uint8_t Speaker::get_volume(){
+float Speaker::get_volume(){
   uint16_t volume_constant;
   this->conf_read(8, &volume_constant);
-  return (volume_constant * -100) / MAX_VOLUME_VALUE + 100;
+  // Convert from hardware value to 0.0-1.0 range
+  return ((volume_constant * -100) / MAX_VOLUME_VALUE + 100) / 100.0f;
 }
 
 } //namespace matrixio

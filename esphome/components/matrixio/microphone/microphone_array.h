@@ -26,8 +26,6 @@ public:
   void stop() override;
   void loop() override;
 
-  size_t read(int16_t *buf, size_t len) override;
-
 private:
   void start_();
   void stop_();

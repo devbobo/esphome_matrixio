@@ -52,7 +52,7 @@ public:
   void unmute();
   void set_volume(uint8_t volume_percentage);
   void set_output(OutputSelector output_selector);
-  uint8_t get_volume();
+  float get_volume() override;
 
   void set_pcm_sampling_frequency(uint32_t sampling_frequency);
   uint32_t read_pcm_sampling_frequency();
