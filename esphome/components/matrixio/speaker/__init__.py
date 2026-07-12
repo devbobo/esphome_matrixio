@@ -1,7 +1,7 @@
 import esphome.codegen as cg
 import esphome.config_validation as cv
 from esphome.components import speaker
-from esphome.const import CONF_ID
+from esphome.const import CONF_ID, CONF_MAX_CHANNELS
 
 from .. import matrixio_ns, wb_device, wb_device_schema, register_wb_device  # noqa
 
@@ -22,6 +22,7 @@ CONFIG_SCHEMA = speaker.SPEAKER_SCHEMA.extend(
         cv.GenerateID(): cv.declare_id(matrix_speaker),
         cv.Optional(CONF_AUDIO_OUT, default="headphone"): cv.enum(OUTPUTS, upper=False),
         cv.Optional(CONF_VOLUME, default=80): cv.All(int, cv.Range(min=1, max=100)),
+        cv.Optional(CONF_MAX_CHANNELS, default=1): cv.int,
     }
 ).extend(wb_device_schema())
 
