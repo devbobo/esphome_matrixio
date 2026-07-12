@@ -71,22 +71,6 @@ void Microphone::stop() {
   this->state_ = microphone::STATE_STOPPING;
 };
 
-size_t Microphone::read(int16_t *buf, size_t len){
-  gpio_num_t gpio;
-  gpio = static_cast<gpio_num_t>(MICROPHONE_ARRAY_IRQ);
-
-  if (xQueueReceive(irq_queue, &gpio, (100 / portTICK_PERIOD_MS) ) )
-  {
-    memset( buf, 0, len );
-    uint8_t* pt = reinterpret_cast<unsigned char *>(buf);
-    this->wb_read( pt, len );
-    return len;
-  }
-
-  ESP_LOGW(TAG,"Buffer underrun.");
-  return 0;
-}
-
 void Microphone::set_sampling_rate(uint32_t sampling_rate){
   for (int i = 0;; i++) {
     if (MIC_SAMPLING_FREQUENCIES[i][0] == 0){
@@ -132,17 +116,9 @@ void Microphone::write_sampling_rate_and_gain(){
 
 void Microphone::read_() {
   const size_t samples_to_read = 512;
-  std::vector<int16_t> samples;
-  samples.resize(samples_to_read);
-  // Read samples from FPGA
-  // Note: Actual read implementation depends on parent microphone interface
-  // Convert int16_t samples to bytes for callback
-  std::vector<uint8_t> data;
-  data.reserve(samples_to_read * sizeof(int16_t));
-  for (const auto &sample : samples) {
-    data.push_back(sample & 0xFF);
-    data.push_back((sample >> 8) & 0xFF);
-  }
+  std::vector<uint8_t> data(samples_to_read * sizeof(int16_t));
+  // Read PCM data from FPGA via wishbone interface
+  this->wb_read(data.data(), data.size());
   this->data_callbacks_.call(data);
 }
 
