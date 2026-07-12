@@ -1,7 +1,7 @@
 import esphome.codegen as cg
 import esphome.config_validation as cv
 from esphome.components import speaker
-from esphome.const import CONF_ID, CONF_MAX_CHANNELS
+from esphome.const import CONF_ID
 
 from .. import matrixio_ns, wb_device, wb_device_schema, register_wb_device  # noqa
 
@@ -12,6 +12,7 @@ matrix_speaker = matrixio_ns.class_("Speaker", speaker.Speaker, wb_device, cg.Co
 
 CONF_AUDIO_OUT = "audio_out"
 CONF_VOLUME = "volume"
+CONF_MAX_CHANNELS = "max_channels"
 
 OutputSelector = matrixio_ns.enum("OutputSelector")
 OUTPUTS = {"speakers": OutputSelector.kSpeaker, "headphone": OutputSelector.kHeadPhone}

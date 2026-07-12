@@ -1,12 +1,14 @@
 import esphome.config_validation as cv
 import esphome.codegen as cg
-from esphome.const import CONF_ID, CONF_MAX_CHANNELS
+from esphome.const import CONF_ID
 from esphome.components import microphone
 
 from .. import matrixio_ns, wb_device, wb_device_schema, register_wb_device  # noqa
 
 DEPENDENCIES = ["matrixio"]
 CODEOWNERS = ["@gnumpi"]
+
+CONF_MAX_CHANNELS = "max_channels"
 
 mics = matrixio_ns.class_("Microphone", microphone.Microphone, wb_device, cg.Component)
 
